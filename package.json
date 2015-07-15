@@ -1,0 +1,24 @@
+{
+  "name": "check-and-format-number",
+  "version": "0.0.0",
+  "description": "Format a number based on a format string '-£#,##0.##0'",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DeeLindesay/check-and-format-number.git"
+  },
+  "keywords": [
+    "number",
+    "format"
+  ],
+  "author": "DeeLindesay",
+  "license": "MIT",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "testit": "~1.2.0"
+  }
+}

@@ -97,7 +97,7 @@ exports = module.exports = function checkAndFormatNumber(value, requiredFormat, 
     (decimalValue.length ? deconstructedFormat.decimalChar : '') +
     decimalValue +
     (isNegative && deconstructedFormat.negativeRightPos > 0 ? deconstructedFormat.negativeRightSymbol : '') +
-    deconstructedFormat.postfix +
+    deconstructedFormat.suffix +
     (isNegative && deconstructedFormat.negativeRightPos === 0 ? deconstructedFormat.negativeRightSymbol : '')
 
 };

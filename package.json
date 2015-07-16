@@ -17,6 +17,7 @@
   "author": "DeeLindesay",
   "license": "MIT",
   "dependencies": {
+    "deconstruct-number-format": "~0.0.1"
   },
   "devDependencies": {
     "testit": "~1.2.0"

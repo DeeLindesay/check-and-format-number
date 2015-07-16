@@ -2,12 +2,12 @@
 To reformat a number using a format string '-£#,##0.##0 /m', '(33 years)', '$ -99.00'.
 
 Checks that the number is a valid number.
-Based on the format string checks length and whether negative values permitted, pads with zeros/rounds and adds prefix and postfix characters
+Based on the format string checks length and whether negative values permitted, pads with zeros/rounds and adds prefix and suffix characters
 
 ## Format String Can Include:
 - negative signs before or after prefix text
 - brackets as negative signs
-- prefix and postfix texts
+- prefix and suffix texts
 - `.` or `,` as decimal point
 - space or `.` or `,` as thousand separators
 - space or `.` or `,` as thousanths separators

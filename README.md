@@ -4,35 +4,62 @@ To reformat a number using a format string '-£#,##0.##0 /m', '(33 years)', '$ -
 Checks that the number is a valid number.
 Based on the format string checks length and whether negative values permitted, pads with zeros/rounds and adds prefix and postfix characters
 
-Accepts:
+## Format String Can Include:
 - negative signs before or after prefix text
 - brackets as negative signs
 - prefix and postfix texts
-- . or , as decimal point
-- space or , as thousand separators
-- space or , as thousanths separators
-- #,9 or 0 as number holders
+- `.` or `,` as decimal point
+- space or `.` or `,` as thousand separators
+- space or `.` or `,` as thousanths separators
+- `#`, `9` or `0` as number place holders
 
-Returns:
-- negativeType: 'right', 'left', 'brackets', 'none'
-- negativeRightPos: 0 if right negative or bracket is at end of expression, >0 if right/bracket is followed by postfix; -1 no right negative
-- negativeLeftPos: 0 if right negative or bracket is at start expression, >0 if right/bracket follows prefix; -1 no left negative
-- postfix: text characters after number; can be ''
-- prefix: text characters before number (cannot include 0,9,#); can be ''
-- negativeLeftSymbol: left hand negative symbol (may include trailing spaces), eg '(', '( ', '- '
-- negativeRightSymbol: right hand negative symbol (may include leading spaces), eg ')', ' )', ' -'
-- decimalChar: character repesenting decimal (. or ,)
-- integerSeparator: separator of thousands (space or ,); empty string if no separator
-- decimalsSeparator: separator of thousanths (space or ,); empty string if no separator
-- padLeft: padding front of number, based on first postition of a zero; -1 = no padding
-- maxLeft: max places permitted before the dp, based on 9 or 0 in first position; -1 = no max
-- padRight: zero padding required to right of dp, based on last postition of a zero; -1 = no padding
-- maxRight: max places permitted after the dp, based on 0 or 9 in last position, can be 0 (integer only); -1 = no max
+## Format Notes and Examples
 
-Notes:
-- For numbers such as 8,345 where the comma is a thousands separator use a trailing decimal point eg 9,999. otherwise ',' will be interpreted as the decimal point.
+### Decimal points/thousands separators in the format string:
+If a format ends in a . or , then this will be taken as the decimal character UNLESS the same character is used elsewhere so:
+- `'923324234','#,###.'`  returns '923,324,234'
+- `'923324234','#.###,'`  returns '923.324.234'
 
+If a format only has one of ',' or '.' and the character only appears once it is taken as the decimal point
+- `'92332,4234','#,###'`  returns '92332,4234'
+- `'92332.4234','#.###'`  returns '92332.4234'
 
-Does not work for:
+If the character appears twice in the format string it is a separator
+- `'92332,4234','#,###,###'`  returns '923,324,234'
+- `'92332,4234','#.###.###'`  returns error - value must be an integer
+
+When in doubt '.' in the format string is the decimal point, so 
+- `'92332,4234.45645','#.###,#'` returns '923324234.456, 45
+To create the same structure with decimalChar as ',', just add a '.' at start or end or extend expression eg
+- `.#.###,#`
+- `#.###,#.`
+- `#.###.###,#`
+
+### Padding
+A `0` will pad to that position
+- `'92332.42','## ##0.##0 ##'`  returns '92 332.420'
+- `'.42','## ##0.##0 ##'`  returns '0.420'
+
+### Maximums
+A `0` or `9` in the last decimal space will cause rounding to that number of places
+- `'92332.42467','## ##0.##0'`  returns '92 332.425'
+A `0` or `9` in the first integer position will limit the size
+- `'92332.42467','9 ##0.##0'`  returns 'error - number too large''
+
+### Negatives
+- `'-2332.42343','(# ###.### #)'`  returns '(2 332.423 43)'
+- `'-2332.42343','- # ###.### #)'`  returns '- 2 332.423 43'
+- `'-2332.42343','# ###.### #-'`  returns '(2 332.423 43-)'
+- `'-2332.42343','# ###.### #'`  returns 'error - must be positive'
+
+### Units/Prefix Text
+Units can be before or after negative symbols.
+Prefix text cannot contain number placeholder characters
+`'-23342456,2343278', '$(# ###.### #) per year'` returns '$(23 342 456.234 327 8) per year'
+`'-23342456,2343278', '($# ###.### # per year)'` returns '($23 342 456.234 327 8 per year)'
+`'-9,342,456.2353278', '$9 ### ##0.00# ###- per year'` returns '$9 342 456.235 327 8- per year';
+`'-9,342,456.2353278', '-$9 ### ##0.00# ### per year'` returns '-$9 342 456.235 327 8 per year';
+
+## Does not work for:
 - structured reference numbers, eg 9999-9999
 - ignores and removes leading and trailing spaces (but retains those between pre/post fix and negative symbols etc)

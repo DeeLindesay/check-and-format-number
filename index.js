@@ -27,11 +27,7 @@ exports = module.exports = function checkAndFormatNumber(value, requiredFormat, 
   // check decimals and remove entered separators
   // *********************************************************************************
 
-  if (deconstructedFormat.maxLeft === 0 &&
-       value.indexOf('.') > -1 && value.indexOf(',') > -1) {
-    return 'error - must be an integer'
-  }
-    
+
   //if ',' being used as a decimal then replace with a '.'
   if ((deconstructedFormat.decimalChar === ','
       || deconstructedFormat.integerSeparator === '.'
@@ -61,7 +57,7 @@ exports = module.exports = function checkAndFormatNumber(value, requiredFormat, 
       value = '' + Number(value).toFixed(deconstructedFormat.padRight);
     }
     //round decimals
-    if (value.slice(value.indexOf('.')).length > deconstructedFormat.maxRight) {
+    if (deconstructedFormat.maxRight > -1 &&  value.slice(value.indexOf('.')).length > deconstructedFormat.maxRight) {
       value = '' + Number(value).toFixed(deconstructedFormat.maxRight);
     }
   }
@@ -85,12 +81,12 @@ exports = module.exports = function checkAndFormatNumber(value, requiredFormat, 
 
   
   //Add integer separators
-  while (/(\d+)(\d{3})/.test(integerValue)) {
+  while (deconstructedFormat.integerSeparator.length && /(\d+)(\d{3})/.test(integerValue)) {
     integerValue = integerValue.replace(/(\d+)(\d{3})/, '$1' + deconstructedFormat.integerSeparator + '$2');
   }
 
   //Add decimal separators
-  while (/(\d{3})(\d+)/.test(decimalValue)) {
+  while (deconstructedFormat.decimalsSeparator.length && /(\d{3})(\d+)/.test(decimalValue)) {
     decimalValue = decimalValue.replace(/(\d{3})(\d+)/, '$1' + deconstructedFormat.decimalsSeparator + '$2');
   }
 

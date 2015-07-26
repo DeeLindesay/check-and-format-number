@@ -1,4 +1,6 @@
-# check-and-format-number
+# This is DEAD - see format-number-with-string instead
+
+#check-and-format-number
 To reformat a number using a format string '-£#,##0.##0 /m', '(33 years)', '$ -99.00'.
 
 Checks that the number is a valid number.
